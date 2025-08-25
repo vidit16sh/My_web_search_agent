@@ -7,7 +7,7 @@ import asyncio
 # ==============================
 # Load API Keys
 # ==============================
-load_dotenv()
+
 genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 SERP_API_KEY = st.secrets["SERP_API_KEY"]
 
