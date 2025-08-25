@@ -9,7 +9,7 @@ import asyncio
 # Load API Keys
 # ==============================
 
-genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 SERP_API_KEY = st.secrets["SERP_API_KEY"]
 
 # ==============================
