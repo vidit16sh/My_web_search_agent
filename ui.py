@@ -11,7 +11,7 @@ def get_base64(bin_file):
         data = f.read()
     return base64.b64encode(data).decode()
 
-background_image = "image.png"
+background_image = "image.png"  # make sure image.png is in the same folder
 bg_base64 = get_base64(background_image)
 
 # Custom CSS with embedded base64 background
@@ -74,6 +74,47 @@ p {{
 @keyframes fadeIn {{
   from {{ opacity: 0; transform: translateY(8px); }}
   to {{ opacity: 1; transform: translateY(0); }}
+}}
+
+/* ================================
+   Chat Input Styling (Glassmorphism)
+   ================================ */
+[data-testid="stChatInput"] > div {{
+    background: rgba(20, 20, 20, 0.35);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    border-radius: 30px;
+    padding: 0.6em 1em;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease-in-out;
+}}
+
+[data-testid="stChatInput"] > div:focus-within {{
+    border: 1px solid #FFD700;
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+}}
+
+[data-testid="stChatInput"] input::placeholder {{
+    color: rgba(255, 255, 255, 0.6);
+}}
+
+[data-testid="stChatInput"] input {{
+    color: #fff !important;
+}}
+
+[data-testid="stChatInput"] button {{
+    background: rgba(255, 215, 0, 0.2);
+    border: 1px solid rgba(255, 215, 0, 0.6);
+    border-radius: 50%;
+    color: #FFD700;
+    transition: all 0.3s ease-in-out;
+}}
+
+[data-testid="stChatInput"] button:hover {{
+    background: #FFD700;
+    color: black;
+    box-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700;
 }}
 </style>
 """, unsafe_allow_html=True)
