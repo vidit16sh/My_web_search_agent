@@ -1,12 +1,12 @@
 # app.py
 import asyncio
 import streamlit as st
-from core import handle_query  # your handler
+from core import handle_query
 
 st.set_page_config(page_title="J.A.R.V.I.S.", page_icon="🤖", layout="wide")
 
 # -------------------------
-# Custom CSS (blue glow UI)
+# Global CSS (fixed background + unified look)
 # -------------------------
 st.markdown("""
 <style>
@@ -18,17 +18,20 @@ st.markdown("""
   --accent-light:#5ec8ff;
 }
 
-html, body, [data-testid="stAppViewContainer"] {
-    background: var(--bg);
+/* Force same background everywhere */
+html, body, [data-testid="stAppViewContainer"], [data-testid="stSidebar"], [data-testid="stHeader"] {
+    background: var(--bg) !important;
     color: var(--text);
     font-family: 'Poppins', sans-serif;
     height: 100%;
 }
 
+/* Remove Streamlit’s extra white/gray block background */
 main .block-container {
+    background: transparent !important;
     padding-top: 36px;
     padding-bottom: 120px; /* reserve space for input */
-    max-width: 900px;  /* keep content nicely centered */
+    max-width: 900px;
     margin: 0 auto;
 }
 
@@ -64,19 +67,19 @@ h1::after{
     box-shadow: 0 3px 18px rgba(0,0,0,0.5);
 }
 
-/* Assistant = blue tint */
+/* Assistant */
 [data-testid="stChatMessage"][data-author="assistant"] > div {
     background: rgba(30,144,255,0.05);
     border-left: 4px solid var(--accent);
 }
 
-/* User = red tint */
+/* User */
 [data-testid="stChatMessage"][data-author="user"] > div {
     background: rgba(229,9,20,0.06);
     border-right: 4px solid #ff4f4f;
 }
 
-/* Input box pinned bottom */
+/* Input wrapper pinned bottom */
 [data-testid="stChatInput"] > div {
     position: fixed;
     bottom: 18px;
@@ -84,10 +87,11 @@ h1::after{
     transform: translateX(-50%);
     width: calc(100% - 40px);
     max-width: 900px;
-    background: rgba(255,255,255,0.02);
+    background: rgba(20,20,20,0.7); /* glass effect */
     border: 1px solid rgba(30,144,255,0.18);
     border-radius: 999px;
     padding: 8px 14px;
+    backdrop-filter: blur(8px);
     box-shadow: 0 6px 26px rgba(8,18,36,0.7);
     z-index: 1000;
 }
@@ -122,7 +126,7 @@ h1::after{
 """, unsafe_allow_html=True)
 
 # -------------------------
-# Main UI
+# Main App
 # -------------------------
 st.title("J.A.R.V.I.S.")
 st.markdown("<p style='text-align:center;color:#8d98a3;'>Your personal AI assistant.</p>", unsafe_allow_html=True)
