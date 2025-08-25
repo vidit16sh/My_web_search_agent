@@ -2,14 +2,14 @@ import os
 import google.generativeai as genai
 import httpx
 import asyncio
-from dotenv import load_dotenv
+
 
 # ==============================
 # Load API Keys
 # ==============================
 load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-SERP_API_KEY = os.getenv("SERP_API_KEY")
+genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+SERP_API_KEY = st.secrets["SERP_API_KEY"]
 
 # ==============================
 # Embedding Function
