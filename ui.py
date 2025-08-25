@@ -10,7 +10,7 @@ st.set_page_config(page_title="J.A.R.V.I.S.", page_icon="🤖", layout="wide")
 # -------------------------
 st.markdown("""
 <style>
-:root{
+:root {
   --bg:#060608;
   --text:#cbd6df;
   --muted:#8d98a3;
@@ -18,15 +18,18 @@ st.markdown("""
   --accent-light:#5ec8ff;
 }
 
-/* Force same background everywhere */
-html, body, [data-testid="stAppViewContainer"], [data-testid="stSidebar"], [data-testid="stHeader"] {
+/* Unified background */
+[data-testid="stAppViewContainer"] {
     background: var(--bg) !important;
     color: var(--text);
     font-family: 'Poppins', sans-serif;
-    height: 100%;
 }
 
-/* Remove Streamlit’s extra white/gray block background */
+[data-testid="stHeader"], [data-testid="stSidebar"] {
+    background: var(--bg) !important;
+}
+
+/* Main content wrapper */
 main .block-container {
     background: transparent !important;
     padding-top: 36px;
@@ -64,7 +67,6 @@ h1::after{
     background: rgba(255,255,255,0.03);
     color: var(--text);
     line-height: 1.6;
-    box-shadow: 0 3px 18px rgba(0,0,0,0.5);
 }
 
 /* Assistant */
