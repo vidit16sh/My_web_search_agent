@@ -1,13 +1,20 @@
 import asyncio
 import streamlit as st
 from core import handle_query
+import base64
 
 st.set_page_config(page_title="J.A.R.V.I.S.", page_icon="🤖", layout="wide")
 
-# Correct the path to your background image
-background_image = "image.png"
+# Convert background image to base64
+def get_base64(bin_file):
+    with open(bin_file, "rb") as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
 
-# Custom CSS with background image
+background_image = "image.png"
+bg_base64 = get_base64(background_image)
+
+# Custom CSS with embedded base64 background
 st.markdown(f"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -17,66 +24,63 @@ html, body, [data-testid="stAppViewContainer"] {{
     font-family: 'Poppins', sans-serif;
     color: #e0e0e0;
     min-height: 100vh;
-    background: url("{background_image}");
+    background: url("data:image/png;base64,{bg_base64}") no-repeat center center fixed;
     background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
 }}
 
+/* Title */
 h1 {{
     font-family: 'Bebas Neue', sans-serif;
     text-align: center;
     color: #FFD700;
-    text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
-    padding-bottom: 0.3em;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+    margin-bottom: 0.2em;
 }}
-
 p {{
     text-align: center;
-    color: #a0a0a0;
-    margin-top: -0.5em;
+    color: #bbb;
+    margin-top: -0.3em;
 }}
 
-/* Fix chat bubbles for st.chat_message */
+/* Chat bubbles */
 [data-testid="stChatMessage"] {{
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
     padding: 0.9em 1.1em;
-    margin: 0.6em 0;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(12px);
+    margin: 0.5em 0;
+    border-radius: 14px;
+    backdrop-filter: blur(14px);
     border-left: 3px solid;
     word-wrap: break-word;
     white-space: pre-wrap;
+    animation: fadeIn 0.3s ease-in-out;
 }}
 
-/* User chat bubble styling */
+/* User bubble */
 [data-testid="stChatMessage"][data-author="user"] {{
-    background: rgba(229, 9, 20, 0.1);
+    background: rgba(229, 9, 20, 0.12);
     border-color: #E50914;
     margin-left: auto;
     max-width: 60%;
-    min-width: 15%;
 }}
 
-/* Assistant chat bubble styling */
+/* Assistant bubble */
 [data-testid="stChatMessage"][data-author="assistant"] {{
-    background: rgba(255, 215, 0, 0.1);
+    background: rgba(255, 215, 0, 0.12);
     border-color: #FFD700;
     margin-right: auto;
-    max-width: 80%;
-    min-width: 25%;
+    max-width: 75%;
+}}
+
+/* Smooth fade-in animation */
+@keyframes fadeIn {{
+  from {{ opacity: 0; transform: translateY(8px); }}
+  to {{ opacity: 1; transform: translateY(0); }}
 }}
 </style>
 """, unsafe_allow_html=True)
 
-# Main container for centering content
+# Main UI
 _, center_col, _ = st.columns([1, 4, 1])
-
 with center_col:
-    # Title and description
     st.title("J.A.R.V.I.S.")
     st.markdown("<p>Your personal AI assistant.</p>", unsafe_allow_html=True)
 
@@ -84,22 +88,18 @@ with center_col:
     if "history" not in st.session_state:
         st.session_state.history = []
 
-    # Display chat history within the centered column
     for role, content in st.session_state.history:
         with st.chat_message(role):
             st.markdown(content)
 
     # Chat input
     if query := st.chat_input("How may I assist you?"):
-        # Display user message
         with st.chat_message("user"):
             st.markdown(query)
 
-        # Get bot response and display
         answer = asyncio.run(handle_query(query))
         with st.chat_message("assistant"):
             st.markdown(answer)
 
-        # Append to history
         st.session_state.history.append(("user", query))
         st.session_state.history.append(("assistant", answer))
